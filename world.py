@@ -1,47 +1,41 @@
 import streamlit as st
-import geopandas as gpd
-import pandas as pd
-import plotly.express as px
-
-# 국가 정보 DataFrame 생성
-data = {
-    'country': ['대한민국', '미국', '프랑스', '일본', '영국', '독일', '중국', '인도'],
-    'capital': ['서울', '워싱턴 D.C.', '파리', '도쿄', '런던', '베를린', '베이징', '뉴델리'],
-    'population': [51780579, 331002651, 65273511, 126476461, 67886011, 83783942, 1439323776, 1380004385],
-    'languages': ['한국어', '영어', '프랑스어', '일본어', '영어', '독일어', '중국어', '힌디어']
+country_data = {
+    "대한민국": "서울, 51780579, 한국어",
+    "미국": "워싱턴 D.C., 331002651, 영어",
+    "프랑스": "파리, 65273511, 프랑스어",
+    "일본": "도쿄, 126476461, 일본어",
+    "영국": "런던, 67886011, 영어",
+    "독일": "베를린, 83783942, 독일어",
+    "중국": "베이징, 1439323776, 중국어",
+    "인도": "뉴델리, 1380004385, 힌디어, 영어",
+    "브라질": "브라질리아, 212559417, 포르투갈어",
+    "러시아": "모스크바, 145912025, 러시아어",
+    "캐나다": "오타와, 37742154, 영어, 프랑스어",
+    "호주": "캔버라, 25499884, 영어",
+    "이탈리아": "로마, 60244639, 이탈리아어",
+    "스페인": "마드리드, 46754778, 스페인어",
+    "멕시코": "멕시코 시티, 128932753, 스페인어",
+    "남아프리카 공화국": "프리토리아, 59308690, 영어, 아프리칸스어, 줄루어, 코사어",
+    "네덜란드": "암스테르담, 17134872, 네덜란드어",
+    "스위스": "베른, 8654622, 독일어, 프랑스어, 이탈리아어, 로만슈어",
+    "스웨덴": "스톡홀름, 10160156, 스웨덴어",
+    "노르웨이": "오슬로, 5421241, 노르웨이어",
+    "핀란드": "헬싱키, 5540720, 핀란드어, 스웨덴어",
+    "터키": "앙카라, 84339067, 터키어",
+    "사우디아라비아": "리야드, 34813867, 아랍어",
+    "아랍에미리트": "아부다비, 9890400, 아랍어",
+    "이스라엘": "예루살렘, 8655535, 히브리어, 아랍어",
+    "한국": "서울, 51780579, 한국어",
+    "바레인": "마나마, 1701575, 아랍어",
+    "싱가포르": "싱가포르, 5850342, 영어, 중국어, 말레이어, 타밀어",
+    "베트남": "하노이, 97338579, 베트남어",
+    "태국": "방콕, 69799978, 태국어",
+    "말레이시아": "쿠알라룸푸르, 32365999, 말레이어, 영어",
+    "필리핀": "마닐라, 109581078, 필리핀어, 영어",
 }
 
-country_info = pd.DataFrame(data)
+# 출력
+for country, info in country_data.items():
+    print(f'"{country}": "{info}"')
 
-# Streamlit 앱 제목
-st.title("세계 지도 국가 선택기")
-
-# 세계 지도 데이터 로드
-world = gpd.read_file(gpd.datasets.get_path('naturalearth_lowres'))
-
-# Plotly로 세계지도 그리기
-fig = px.choropleth(world,
-                     locations='name',
-                     geojson=world.geometry,
-                     hover_name='name',
-                     title='세계 각국 선택하기')
-
-fig.update_geos(fitbounds="locations", visible=False)
-
-# Streamlit에서 지도 표시
-st.plotly_chart(fig)
-
-# 국가 선택
-selected_country = st.selectbox("국가를 선택하세요:", country_info['country'])
-
-# 선택된 국가 정보 표시
-if selected_country:
-    capital = country_info[country_info['country'] == selected_country]['capital'].values[0]
-    population = country_info[country_info['country'] == selected_country]['population'].values[0]
-    languages = country_info[country_info['country'] == selected_country]['languages'].values[0]
-
-    st.subheader(f"{selected_country} 정보")
-    st.write(f"수도: {capital}")
-    st.write(f"인구: {population}명")
-    st.write(f"사용 언어: {languages}")
 
